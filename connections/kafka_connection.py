@@ -11,7 +11,7 @@ def create_consumer(topic_name, group_id=None, auto_offset_reset="earliest"):
     """
     return KafkaConsumer(
         topic_name,
-        bootstrap_servers=os.getenv('BOOTSTRAP_SERVERS'),
+        bootstrap_servers=os.getenv('KAFKA_SERVERS'),
         value_deserializer=lambda v: json.loads(v.decode("utf-8")),
         auto_offset_reset=auto_offset_reset,
         group_id=group_id or f"group_{topic_name}",
@@ -23,6 +23,6 @@ def create_producer():
     Returns a KafkaProducer ready to send to a Topic
     """
     return KafkaProducer(
-        bootstrap_servers=os.getenv('BOOTSTRAP_SERVERS'),
+        bootstrap_servers=os.getenv('KAFKA_SERVERS'),
         value_serializer=lambda v: json.dumps(v).encode("utf-8")
     )

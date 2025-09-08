@@ -1,9 +1,8 @@
 import json
-
-from elastic.elastic import Elastic
-from kafka1.consumer import Consumer
+from services.elastic.elastic import Elastic
+from services.kafka.consumer import Consumer
 from services.file_path import get_files_path_in_folder, metadata_by_file_path, convert_dict_to_json
-from kafka1.produser import Producer
+from services.kafka.produser import Producer
 
 producer = Producer()
 
@@ -16,7 +15,7 @@ for path_file in path_files:
     producer.send_message(json_data_file, "data_file")
 
 consumer = Consumer('data_file')
-data = consumer._consumer()
+data = consumer.run_consumer()
 ela = Elastic('metadata_of_files')
 
 list_dict = []
