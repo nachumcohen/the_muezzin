@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 
@@ -23,8 +22,3 @@ def metadata_by_file_path(file_path):
         metadata_dict["last_modified_date"] = file_stats.st_mtime
 
     return metadata_dict
-
-
-def convert_dict_to_json(dict_to_convert : dict):
-    dict_to_json = json.dumps(dict_to_convert)
-    return dict_to_json
