@@ -1,16 +1,12 @@
-import os
-
-from dotenv import load_dotenv
-from elasticsearch import Elasticsearch, helpers
+from elasticsearch import helpers
 from elasticsearch.helpers import BulkIndexError
 
+from connections.elasticsearch_connection import create_elasticsearch
 
-load_dotenv()
-elasticsearch = os.getenv('ELASTIC_SERVER')
 
 class Elastic:
     def __init__(self , index_name:str):
-        self.es = Elasticsearch(elasticsearch)
+        self.es = create_elasticsearch()
         self.index_name = index_name
         self.check_all_processed = False
 
