@@ -5,17 +5,18 @@ from kafka import KafkaConsumer, KafkaProducer
 
 load_dotenv()
 
-def create_consumer(topic_name, group_id=None, auto_offset_reset="earliest"):
+def create_consumer(topic_name, group_id=None, auto_offset_reset="earliest" , time = 5000):
     """
     Return KafkaConsumer ready to read from a topic
     """
     return KafkaConsumer(
         topic_name,
         bootstrap_servers=os.getenv('KAFKA_SERVERS'),
-        value_deserializer=lambda v: json.loads(v.decode("utf-8")),
+        value_deserializer=lambda v: json.loads(v.decode('utf-8')),
         auto_offset_reset=auto_offset_reset,
         group_id=group_id or f"group_{topic_name}",
-        enable_auto_commit=True
+        enable_auto_commit=True,
+        consumer_timeout_ms=time
     )
 
 def create_producer():
@@ -24,5 +25,6 @@ def create_producer():
     """
     return KafkaProducer(
         bootstrap_servers=os.getenv('KAFKA_SERVERS'),
-        value_serializer=lambda v: json.dumps(v).encode("utf-8")
+        value_serializer=lambda v: json.dumps(v).encode('utf-8')
+
     )
