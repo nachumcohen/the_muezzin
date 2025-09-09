@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def create_mongo_client():
+    """
+    :return: connection to mongodb
+    """
     mongo_server = os.getenv('MONGO_SERVER')
     db_name = os.getenv('db_name')
     client = MongoClient(mongo_server)

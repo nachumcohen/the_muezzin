@@ -20,7 +20,7 @@ path_folder = os.getenv('PATH_FOLDER')
 topic = os.getenv('TOPIC')
 
 def _created_id_by_metadata(metadata:dict):
-    id = hash(f"{metadata['name']}{metadata['last_modified_date']}{metadata['size']}")
+    id = hash(f"{metadata['name']}{metadata['last_modified_date']}{metadata['size']}{metadata['id_owner']}")
     return id
 
 def return_list_of_dicts_with_metadata_and_pathfile_by_folder(folder:str = path_folder):
