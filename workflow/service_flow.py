@@ -25,22 +25,25 @@ def _created_id_by_metadata(metadata:dict):
 
 def return_list_of_dicts_with_metadata_and_pathfile_by_folder(folder:str = path_folder):
     path_files = get_files_path_in_folder(folder)
-    dict_data_file = {}
     list_data_files = []
     for path_file in path_files:
+        dict_data_file = dict()
+        metadata = metadata_by_file_path(path_file)
+        unique_id = _created_id_by_metadata(metadata)
         dict_data_file["path_file"] = path_file
-        dict_data_file['metadata'] = metadata_by_file_path(path_file)
+        dict_data_file['metadata'] = metadata
+        dict_data_file['unique_id'] = unique_id
         list_data_files.append(dict_data_file)
-    return list_data_files[:3]
+    return list_data_files
 
 
 def insert_kafka(list_data_files:list):
     for data_file in list_data_files:
         try:
           producer.send_message(data_file, topic)
-          logger.info("data_file(path_file + metadata) go to kafka")
+          logger.info(f"{data_file['metadata']['name']} ,data_file(path_file + metadata) go to kafka")
         except Exception as e:
-            logger.error(e)
+            logger.error(f"{data_file['metadata']['name']}, {e}")
 
 def pull_kafka():
     consumer = Consumer(topic)
@@ -51,25 +54,29 @@ def pull_kafka():
 
 def insert_elastic(data_files:list[dict]):
     list_dict = []
-    for value in data_files:
+    for data_file in data_files:
+        path_file = data_file["path_file"]
 
-        id = _created_id_by_metadata(value['metadata'])
-        value["Unique_ID"] = id
-
-        path_file = value["path_file"]
-        if value['metadata']['size'] > 0:
+        if data_file['metadata']['size'] > 0:
             text = convert_audio_to_text(path_file)
-            print(text)
-            value['metadata']["text"] = text
+            data_file['metadata']["text"] = text
+            logger.info(f"{data_file['metadata']['name']}, Text successfully added")
+
         else:
-            value['metadata']["text"] = None
-        list_dict.append(value)
+            data_file['metadata']["text"] = None
+            logger.info(f"{data_file['metadata']['name']}, non text")
+        list_dict.append(data_file)
 
     elastic.insert_docs(list_dict)
 
 def insert_mongo(data_files:list[dict]):
 
     for data_file in data_files:
-        path_file = data_file["path_file"]
-        id = _created_id_by_metadata(data_file['metadata'])
-        mongo_dal.store_file_audio(path_file , id)
+        try:
+            path_file = data_file["path_file"]
+            id = data_file['unique_id']
+            mongo_dal.store_file_audio(path_file , id)
+            logger.info(f"{data_file['metadata']['name']}, insert mongo successfully")
+
+        except Exception as e:
+            logger.error(f"{data_file['metadata']['name']}, {e}")

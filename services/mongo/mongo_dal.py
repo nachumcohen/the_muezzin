@@ -1,5 +1,8 @@
 import gridfs
 from connections.mongo_connection import create_mongo_client
+from logger import Logger
+
+logger = Logger.get_logger()
 
 class MongoDAL:
 
@@ -10,6 +13,6 @@ class MongoDAL:
         fs = gridfs.GridFS(self.db)
 
         with open(file_path, 'rb') as f:
-            file_id = fs.put(f, filename=id)
+            file_id = fs.put(f, unique_id=id)
 
-        print(f"stored successfully with ID: {file_id}")
+        logger.info(f"stored successfully with ID: {file_id}")

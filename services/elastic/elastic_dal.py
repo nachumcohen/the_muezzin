@@ -1,8 +1,9 @@
 from elasticsearch import helpers
 from elasticsearch.helpers import BulkIndexError
-
 from connections.elasticsearch_connection import create_elasticsearch
+from logger import Logger
 
+logger = Logger.get_logger()
 
 class Elastic:
     def __init__(self , index_name:str):
@@ -14,9 +15,6 @@ class Elastic:
         self.es.indices.delete(index=self.index_name, ignore_unavailable=True)
         self.es.indices.create(index=self.index_name, mappings=mapping)
 
-    def insert_doc(self, doc):
-            self.es.index(index = self.index_name, body=doc)
-
     def insert_docs(self, docs: list[dict]):
         actions = [
             {
@@ -27,8 +25,10 @@ class Elastic:
         ]
         try:
             helpers.bulk(self.es, actions)
+            logger.info("insert successfully docs")
+
         except BulkIndexError as e:
-            print("Bulk error:", e.errors)
+            logger.error("Bulk error:", e)
 
     def get_all(self):
         query = {

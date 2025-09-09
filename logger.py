@@ -7,7 +7,7 @@ from connections.elasticsearch_connection import create_elasticsearch
 class Logger:
     _logger = None
     @classmethod
-    def get_logger(cls, name="logging", es_host=create_elasticsearch(),
+    def get_logger(cls, name:str = 'logger_files', es_host=create_elasticsearch(),
                    index="logging", level=logging.DEBUG):
             if cls._logger:
                 return cls._logger
@@ -22,8 +22,8 @@ class Logger:
                                 "timestamp": datetime.utcnow().isoformat(),
                                 "level": record.levelname,
                                 "logger": record.name,
-                                "message": record.getMessage()
-
+                                "message": record.getMessage(),
+                                "funcName": record.funcName
                                 })
                         except Exception as e:
                             print(f"ES log failed: {e}")
