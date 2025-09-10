@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 from loging.logger import Logger
-from services.fiels.convert_audio_files import convert_audio_to_text
+from services.files.convert_audio_files import convert_audio_to_text
 from services.processing_elastic.consumer import Consumer
 from services.processing_elastic.elastic_dal import Elastic
 

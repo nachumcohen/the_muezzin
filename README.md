@@ -19,8 +19,8 @@
 - service_metadata - Creates metadata about a file and sends it to Kafka
 - 
 - processing_mongo,
-   consumer listens to Kafka and sends a path to a file with conversion to bits, 
-  and sends to Mongo with unique id.
+   consumer listens to Kafka and sends file with conversion to bits, 
+  and sends to Mongo with unique id, Uses gridfs directory for file storage
 
 - processing_elastic 
     Listens to Kafka and sends what it received to Elastic, 

@@ -1,8 +1,8 @@
 import os
 from dotenv import load_dotenv
 from loging.logger import Logger
-from services.fiels.file_path import get_files_path_in_folder
-from services.fiels.metadata import metadata_by_file_path
+from services.files.file_path import get_files_path_in_folder
+from services.files.metadata import metadata_by_file_path
 from services.service_metadata.produser import Producer
 
 logger = Logger.get_logger()
