@@ -1,7 +1,8 @@
 from connections.kafka_connection import create_consumer
-from logger import Logger
+from loging.logger import Logger
 
 logger = Logger.get_logger()
+
 class Consumer:
     def __init__(self , topic_name:str , group_id:str=None, auto_offset_reset="earliest"):
         self.consumer = create_consumer(topic_name , group_id , auto_offset_reset)

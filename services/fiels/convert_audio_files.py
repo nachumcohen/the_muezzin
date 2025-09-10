@@ -1,5 +1,5 @@
 import whisper
-from logger import Logger
+from loging.logger import Logger
 
 logger = Logger.get_logger()
 def convert_audio_to_text(file):

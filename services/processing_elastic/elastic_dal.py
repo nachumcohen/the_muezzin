@@ -1,13 +1,14 @@
 from elasticsearch import helpers
 from elasticsearch.helpers import BulkIndexError
+
 from connections.elasticsearch_connection import create_elasticsearch
-from logger import Logger
+from loging.logger import Logger
 
 logger = Logger.get_logger()
 
 class Elastic:
     def __init__(self , index_name:str):
-        self.es = create_elasticsearch()
+        self.es = create_elasticsearch() # get connection to elasticsearch
         self.index_name = index_name
         self.check_all_processed = False
 
@@ -36,7 +37,5 @@ class Elastic:
                 "match_all": {}
             },
         }
-
         results = self.es.search(index=self.index_name, body=query, size=10000)
-        documents = [(hit["_id"], hit["_source"]) for hit in results["hits"]["hits"]]
-        return documents
+        return results

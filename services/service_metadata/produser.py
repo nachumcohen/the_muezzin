@@ -1,5 +1,6 @@
 from connections.kafka_connection import create_producer
 
+
 class Producer:
 
     def __init__(self):

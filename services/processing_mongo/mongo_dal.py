@@ -1,6 +1,6 @@
 import gridfs
 from connections.mongo_connection import create_mongo_client
-from logger import Logger
+from loging.logger import Logger
 
 logger = Logger.get_logger()
 
